@@ -1,17 +1,23 @@
-import Button from 'components/Button/Button';
-import { Item, List, Text } from './ContactList.styles';
+import ContactItem from 'components/ContactItem/ContactItem';
+import { List } from './ContactList.styled';
+import { useSelector } from 'react-redux';
+import { getContacts, getFilterValue } from '../../redux/selectors';
 
-const ContactList = ({ data, handleDelete }) => {
+const getFilterContacts = (contacts, filterValue) => {
+  return contacts.filter(({ name }) =>
+    name.toLowerCase().includes(filterValue.toLowerCase())
+  );
+};
+
+const ContactList = () => {
+  const contacts = useSelector(getContacts);
+  const filterValue = useSelector(getFilterValue);
+  const filterContacts = getFilterContacts(contacts, filterValue);
+
   return (
     <List>
-      {data.map(({ id, name, number }) => {
-        return (
-          <Item key={id}>
-            <Text>{name}</Text>
-            <Text>{number}</Text>
-            <Button action={() => handleDelete(id)}>Delete</Button>
-          </Item>
-        );
+      {filterContacts?.map(({ id, name, number }) => {
+        return <ContactItem key={id} name={name} number={number} id={id} />;
       })}
     </List>
   );

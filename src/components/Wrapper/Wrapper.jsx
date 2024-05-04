@@ -1,4 +1,4 @@
-import { Background } from './Wrapper.styles';
+import { Background } from './Wrapper.styled';
 
 const Wrapper = ({ children }) => <Background>{children}</Background>;
 

@@ -1,7 +1,15 @@
-import { Input } from './Filter.styles';
+import { useDispatch } from 'react-redux';
+import { Input } from './Filter.styled';
+import { setValue } from '../../redux/filterSlice';
 
-const Filter = ({ onSearch }) => {
-  return <Input onChange={onSearch}></Input>;
+const Filter = () => {
+  const dispatch = useDispatch();
+
+  const searchContact = e => {
+    dispatch(setValue(e.target.value));
+  };
+
+  return <Input onChange={searchContact}></Input>;
 };
 
 export default Filter;

@@ -1,8 +1,14 @@
 import Button from 'components/Button/Button';
-import { nanoid } from 'nanoid';
-import { Form, Input, Text } from './ContactForm.styles';
+import { Form, Input, Text } from './ContactForm.styled';
+import { useDispatch, useSelector } from 'react-redux';
+import { getContacts } from '../../redux/selectors';
+import { addContactAction } from '../../redux/contactsSlice';
+import { toast } from 'react-toastify';
 
-const ContactForm = ({ onSubmit }) => {
+const ContactForm = () => {
+  const dispatch = useDispatch();
+  const contacts = useSelector(getContacts);
+
   const handleSubmit = e => {
     e.preventDefault();
 
@@ -11,7 +17,20 @@ const ContactForm = ({ onSubmit }) => {
       number: e.target.number.value,
     };
 
-    onSubmit({ id: nanoid(), ...formData });
+    const checkName = contacts.some(
+      ({ name }) => name.toLowerCase() === formData.name.toLowerCase()
+    );
+
+    if (checkName) {
+      return alert(`${formData.name} is already in contacts.`);
+    }
+
+    dispatch(addContactAction(formData));
+
+    toast.success('Element added successfully!', {
+      position: 'top-right',
+    });
+
     e.target.reset();
   };
 
